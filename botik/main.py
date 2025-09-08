@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 
 # 🔑 Вставь сюда токен от BotFather
-TOKEN = 7815562438:AAH7_G5GbEo6WufJ3U0HmyqXtIlNEoCLhrk
+TOKEN = "7815562438:AAH7_G5GbEo6WufJ3U0HmyqXtIlNEoCLhrk"
 
 bot = Bot(TOKEN)
 dp = Dispatcher()
@@ -137,3 +137,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
