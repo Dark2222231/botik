@@ -1,18 +1,14 @@
-import os
 import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 
-# Токен берём из переменных окружения (Railway/Render)
-TOKEN = os.getenv("TOKEN")
-
-if not TOKEN:
-    raise ValueError("❌ Не найден TOKEN! Укажи его в переменных окружения Railway/Render.")
+# 🔑 Вставь сюда токен от BotFather
+TOKEN = 7815562438:AAH7_G5GbEo6WufJ3U0HmyqXtIlNEoCLhrk
 
 bot = Bot(TOKEN)
 dp = Dispatcher()
 
-# ===== Суровые вопросы =====
+# ===== Суровые 22 вопроса =====
 questions = [
     "Что важнее: свобода или стабильность?",
     "Веришь ли ты, что человек полностью отвечает за свою судьбу?",
@@ -38,17 +34,17 @@ questions = [
     "Стоит ли всегда доверять только себе?"
 ]
 
-# Хранилище ответов
+# Хранилище
 user_answers = {}   # {user_id: {"step": int, "answers": []}}
 quiz_links = {}     # {friend_id: owner_id}
-finished_users = {} # {user_id: answers} — ответы первого человека
+finished_users = {} # {user_id: answers}
 
 # ===== Старт =====
 @dp.message(Command("start"))
 async def start(message: types.Message):
     user_answers[message.from_user.id] = {"step": 0, "answers": []}
     await message.answer("👋 Привет! Давай проверим вашу совместимость.\n\nОтвечай на 22 вопроса.")
-    await message.answer(questions[0])
+    await message.answer(f"Вопрос 1/{len(questions)}:\n{questions[0]}")
 
 # ===== Ответы первого пользователя =====
 @dp.message()
@@ -65,7 +61,7 @@ async def quiz(message: types.Message):
         data["step"] += 1
 
     if data["step"] < len(questions):
-        await message.answer(questions[data["step"]])
+        await message.answer(f"Вопрос {data['step']+1}/{len(questions)}:\n{questions[data['step']]}")
     else:
         finished_users[user_id] = data["answers"]
         link = f"/quiz {user_id}"
@@ -94,7 +90,7 @@ async def start_friend_quiz(message: types.Message):
     user_answers[friend_id] = {"step": 0, "answers": []}
 
     await message.answer("🔥 Отлично! Ты проходишь тест для друга. Отвечай честно 😉")
-    await message.answer(questions[0])
+    await message.answer(f"Вопрос 1/{len(questions)}:\n{questions[0]}")
 
 # ===== Друг отвечает =====
 @dp.message()
@@ -110,7 +106,7 @@ async def friend_quiz(message: types.Message):
     data["step"] += 1
 
     if data["step"] < len(questions):
-        await message.answer(questions[data["step"]])
+        await message.answer(f"Вопрос {data['step']+1}/{len(questions)}:\n{questions[data['step']]}")
     else:
         owner_id = quiz_links.get(friend_id)
         if not owner_id:
